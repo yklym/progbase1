@@ -13,15 +13,24 @@ int main() {
     const float xstep = 0.5;
 
     float x = xmin;  // x is mutable
-    float y = cos(x);
+    float y = 0;
     while (x <= xmax) {
         // eval y(x)
-        // print values
-        y = cos(x);
-        printFloat(x);
-        puts("");
-        printFloat(y);
-        printString(" :");
+        // підстановка формули залежно від х
+        if (x <= 3 && x > -5){
+            y = -pow((x-1), 3) + 2 / (3 * x);
+        }
+        else {
+            y = 0.5 * (1 / tan(x - 5));
+        }
+        // перевірка  
+        if (x == 0 || tan(x-5) == 0){
+             printf("y(%.1f) = ERROR\n", x);
+        }
+        else {
+            printf("y(%.1f) = %f\n", x, y);
+        }
+        //зміна значення х
         x += xstep;
     }
     // Кінець програми
