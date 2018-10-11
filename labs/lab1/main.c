@@ -25,7 +25,7 @@ int main(void) {
     printf("Enter y:\n");
     scanf("%f", &y);
     
-printf("Enter z:\n");
+    printf("Enter z:\n");
     scanf("%f", &z);
     
     //проведення розрахунків
