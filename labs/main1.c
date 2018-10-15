@@ -7,19 +7,20 @@ void drawLine(int x0, int y0, int x1, int y1, char ch);
 
 int main(void)
 {
-    char key = 0;
-    // VARS FOR LINE A
-    int linAx0 = 30;
-    int linAy0 = -1 * linAx0 + 34;//4
-    int linAx1 = 17;
-    int linAy1 = -1 * linAx1 + 34;;//17
-    //VARS FOR LINE B
-    int linBx0 = 5;
-    int linBy0 = linBx0 - 5;//0
-    int linBx1 = 22;
-    int linBy1 = linBx1 - 5; //17
-    
+    int Ax0 = 30;
+    int Ay0 = 4;
+    int Ax1 = 17;
+    int Ay1 = 0;
+
+    int Bx0 = 5;
+    int By0 = 1;
+    int By1 = 0;
+    int Bx1 = 21;
+
+    int key = 0;
+
     do { 
+
         // FRAME
         int zwidth = 0;
         int zheight = 0;
@@ -31,43 +32,6 @@ int main(void)
 
         Console_clear();
 
-        int ax = 0;
-        int ay = 0;
-
-        const int ax0 = x0 + 1;
-        const int ay0 = y0 + 1;
-
-        // ADD SOME COLORS
-        Console_setCursorPosition(ay0, ax0);
-        
-        for (ay = ay0; ay <= height; ay++)
-        {
-            for (ax = ax0; ax <= width; ax++)
-            {
-                Console_setCursorPosition(ay, ax);
-                
-                if ((ax >= linBx0 + ay) && ax <= linAx0 - ay + linAy0) {
-                    Console_setCursorAttribute(BG_GREEN);
-                } else if (ax >= linAx0 - ay + linAy0  && ax >= linBx0 + ay) {
-                    Console_setCursorAttribute(BG_RED);
-                } else if (ax <= linBx0 + ay && ax <= linAx0 - ay + linAy0){
-                    Console_setCursorAttribute(BG_MAGENTA);
-                } else 
-                Console_setCursorAttribute(BG_BLUE);   
-                
-                putchar(' ');
-                Console_reset();
-            }
-        }
-       
-         //LINE 1
-        Console_setCursorAttribute(BG_BLACK);
-        drawLine(linAx0, linAy0, linAx1, linAy1, ' ' );
-        //LINE 2
-        drawLine(linBx0, linBy0, linBx1, linBy1, ' ' );
-        
-        //Console_reset();
-        
         // horizontal lines
         for (zwidth = x0; zwidth <= x0 + width; zwidth++)
         {
@@ -89,7 +53,46 @@ int main(void)
             Console_setCursorPosition(zheight, zwidth);
             printf("|");
         }
+        
 
+        int ax = 0;
+        int ay = 0;
+
+        const int ax0 = x0 + 1;
+        const int ay0 = y0 + 1;
+        const int awidth = width;
+        const int aheight = height ;
+
+        // ADD SOME COLORS
+        Console_setCursorPosition(ay0, ax0);
+        
+        for (ay = ay0; ay <= aheight; ay++)
+        {
+            for (ax = ax0; ax <= awidth; ax++)
+            {
+                Console_setCursorPosition(ay, ax);
+                
+                if ((ax >= Bx0 + ay) && ax <= Ax0 - ay + Ay0) {
+                    Console_setCursorAttribute(BG_GREEN);
+                } else if (ax >= Ax0 - ay + Ay0  && ax >= Bx0 + ay) {
+                    Console_setCursorAttribute(BG_RED);
+                } else if (ax <= Bx0 + ay && ax <= Ax0 - ay + Ay0){
+                    Console_setCursorAttribute(BG_MAGENTA);
+                } else 
+                Console_setCursorAttribute(BG_BLUE);   
+                
+
+                putchar(' ');
+                Console_reset();
+            }
+        }
+
+        //LINE 1
+        Console_setCursorAttribute(BG_BLACK);
+        drawLine(Ax0, Ay0, Ax1, Ay1 + zheight - y0, ' ' );
+        //LINE 2
+        drawLine(Bx0, By0, Bx1, By1 + zheight - y0, ' ' );
+        
         //INPUT
         Console_reset();
         key = Console_getChar();
@@ -98,53 +101,59 @@ int main(void)
             case 'w':
             case 'a': 
             {
-                if (linAx1 > x0 - 0.4 * height) {
-                    linAy0 -= 1;
-                    linAx1 -= 1;
+                if (Ax1 > x0 + 1) {
+                // Ax0 -= 1;
+                // Ax1 -= 1;
+                    Ay0 -= 1;
+                    Ax1 -= 1;
                         
                 }
+                
             }
             break;
             
             case 's':
             case 'd': 
             {
-                if (linAy0 < 0.4 * height ){
-                    linAy0 += 1;
-                    linAx1 += 1;
+                if (Ay0 < 0.4 * zwidth ){
+                    Ay0 += 1;
+                    Ax1 += 1;
                 }
             } 
             break;
             
-            case 'k':
+            case 'i':
             case 'j': 
             {
-                if (linBx1 > 0.4 * width) {
-                linBx0 -= 1;
-                linBx1 -= 1;
+                if (Bx0 > x0 + 1) {
+                Bx0 -= 1;
+                Bx1 -= 1;
                 }    
             }     
             break;
             
-            case 'i':
+            case 'k':
             case 'l':
             {
-                if (linBx1 <= width){
-                    linBx0 += 1;
-                    linBx1 += 1;
-                }  
+                if (Bx1 < zwidth - 1){
+                    Bx0 += 1;
+                    Bx1 += 1;
+                }
             }
             break;
             
             default: ;
         }
+
         Console_reset();
         Console_setCursorPosition(25, 1);
     
-    } while (key != ' ');
-    
+    }
+    while (key != ' ');
     return 0;
 }
+
+
 
 void drawLine(int x0, int y0, int x1, int y1, char ch)
 {    
