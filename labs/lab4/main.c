@@ -18,7 +18,10 @@ int main() {
     int kMain =0;
 
     do {
-    printf("1.Array\n2.Matrix.\n3.Bonus\n4.Escape\n");
+    printf("1.Array\n");
+    printf("2.Matrix.\n");
+    printf("3.Bonus\n");
+    printf("4.Escape\n");
     scanf("%i", &kMain);
     Console_clear();
     switch(kMain){
@@ -40,12 +43,18 @@ int main() {
             //MENU 1
             int k1 = 0;
             do {
-                Console_clear();
+                // Console_clear();
                 for (int i = 0; i < nArray; i++){
                     printf("%.2f  ", array[i]);
                 }
                 puts("\n");
-                printf("1.Randomize\n2.Zero\n3.Max value\n4.Positive sum\n5.Change Max&MIN\n6.Increase elements\n7.Main menu\n");
+                printf("1.Randomize\n");
+                printf("2.Change by zero\n");
+                printf("3.Get max value\n");
+                printf("4.Summ of all positive\n");
+                printf("5.Swap max&min\n");
+                printf("6.Increase all by n\n");
+                printf("<-- 7.Main Menu\n");
                 printf("\nChoose  your option:\n\n");
                 
                 scanf("%i", &k1);
@@ -72,6 +81,7 @@ int main() {
                             // float scale = rand() / (float)rmax; 
                             array[i] = (rand() % (rmax - rmin + 1) + rmin) / 100.0;
                         }
+                        Console_clear();
 
                     }
                     break;
@@ -80,7 +90,8 @@ int main() {
                         for (int i = 0; i < nArray; i++ ){
                             array[i] = 0;
                         }
-                        printf("All elements were set to zero");
+                        Console_clear();
+                        printf("All elements were set to zero\n");
                     }
                     break;
 
@@ -94,7 +105,7 @@ int main() {
                                 arrmaxindex = i;
                             }
                         }
-                        printf("Element # %i is maximal and equals %.2f", arrmaxindex + 1, arrmax);
+                        printf("Element # %i is maximal and equals %.2f\n", arrmaxindex + 1, arrmax);
                     }
                     break;
                     
@@ -106,12 +117,14 @@ int main() {
                             }
 
                         }
-                        printf("The summ of positive elements equals %.2f", positiveSumm);
+                        Console_clear();
+                        printf("The summ of positive elements equals %.2f\n", positiveSumm);
 
                     }
                     break;
                     
                     case 5: {
+                        Console_clear();
                         float arrmax = array[0];
                         int arrmaxindex = 0;
                         for (int i = 0; i < nArray; i++ ){
@@ -131,21 +144,22 @@ int main() {
                         }
 
                         array[arrminindex] = arrmax;
-                        array[arrmaxindex] = arrmin;                        
+                        array[arrmaxindex] = arrmin;
+                        printf("Positions of max&min were swaped!\n");                        
                     }
                     break;
                     
                     case 6: {
                         Console_clear();
                         int n = 0;
-                        printf("All elements will be increased by:");
+                        printf("All elements will be increased by:\n");
                         scanf("%i", &n);
 
                         for (int i = 0; i < nArray; i++){
                             array[i] += n;
                         }
-
-                        printf("All the elements were increased by %i", n);
+                        Console_clear();
+                        printf("All the elements were increased by %i\n", n);
 
                     }
                     break;
@@ -159,7 +173,7 @@ int main() {
                     break;
                 }
 
-            Console_clear();    
+            // Console_clear();    
             } while(k1 != 7);
         }
         break;
@@ -190,14 +204,21 @@ int main() {
             Console_clear();
             do {
                 for (int i = 0; i < iMatrix; i++){
-                    for (int j = 0; j < jMatrix; j++){
-                        printf("%2.f ", matrix[i][j]);
-                    }
-                    puts("");
-                } 
+                            for (int j = 0; j < jMatrix; j++){
+                                printf("%6.2f|", matrix[i][j]);
+                            }
+                        puts("");
+                        }
+                        puts(""); 
                 puts("\n");
-                printf("\n\n1.Randomize\n2.Set to zero\n3.Min value\n4.Summ in the line\n5.Swap Max&Min\n6.Change Value\n7.Main menu\n");
-                printf("\nChoose  your option:7\n\n");
+                printf("\n\n1.Randomize\n");
+                printf("2.Set to zero\n");
+                printf("3.Min vaue\n");
+                printf("4.Summ in the choosen line\n");
+                printf("5.Swap max&min\n");
+                printf("6.Cnage choosen element\n");
+                printf("<--7.Main Menu\n");
+                printf("\nChoose  your option:\n\n");
                 scanf("%i", &k2);                
                 
                 switch(k2){
@@ -212,9 +233,9 @@ int main() {
                             printf("Max rand value is:\n");
                             scanf("%i", &rmax);
                             if (rmin > rmax){
-                                puts("Error, min > max!");
+                                puts("Error, min > max!\n");
                             }
-                        } while(rmin > rmax);
+                            } while(rmin > rmax);
                         rmax *= 100;
                         rmin *= 100;
                         
@@ -246,7 +267,7 @@ int main() {
 
                         for (int i = 0; i < iMatrix; i++ ){
                             for (int j = 0; j < jMatrix; j++){
-                                if (matrixmin < matrix[i][j]){
+                                if (matrixmin > matrix[i][j]){
                                     matrixmin = matrix[i][j];
                                     matrixminindexi = i;
                                     matrixminindexj = j;
@@ -259,16 +280,24 @@ int main() {
 
                     case 4: {
                         Console_clear();
+                        for (int i = 0; i < iMatrix; i++){
+                            for (int j = 0; j < jMatrix; j++){
+                                printf("%6.2f|", matrix[i][j]);
+                            }
+                        puts("");
+                        }
+                        puts(""); 
                         int n4 = 0;
                         float res = 0;
                         
-                        printf("Choose matrix line:");
+                        printf("Choose matrix line:\n");
                         scanf("%i", &n4);
+                        Console_clear();
                         
                         for (int i = 0; i < jMatrix; i++){
                             res += matrix[n4-1][i];
                         }
-                        printf("Summ of the line %i equals %.2f\n", n4, res); 
+                        printf("Summ in the line %i equals %.2f\n", n4, res); 
 
                     } break;
 
@@ -310,6 +339,14 @@ int main() {
 
                     case 6: {
                         Console_clear();
+                        for (int i = 0; i < iMatrix; i++){
+                            for (int j = 0; j < jMatrix; j++){
+                                printf("%6.2f|", matrix[i][j]);
+                            }
+                        puts("");
+                        }
+                        puts("");
+
                         int i6 = 0;
                         int j6 = 0;
 
