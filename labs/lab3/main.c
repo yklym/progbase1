@@ -53,7 +53,7 @@ int main(void)
                 } else if (ax <= linBx0 + ay && ax <= linAx0 - ay + linAy0){
                     Console_setCursorAttribute(BG_MAGENTA);
                 } else 
-                Console_setCursorAttribute(BG_BLUE);   
+                    Console_setCursorAttribute(BG_BLUE);   
                 
                 putchar(' ');
                 Console_reset();

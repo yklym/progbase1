@@ -9,9 +9,12 @@
 #include <ctype.h>
 #include <progbase.h>
 #include <time.h>
+#include <stdbool.h>
 
-void printAllChar(int ASCIMIN, int ASCIMAX);
-void scanClear ();
+void printAllChar(int ASCIMIN, int ASCIMAX); //prints ASCI characters with indexes
+void scanClear();
+void putsblue(char str[50]);
+void putsred(char str[50]);
 
 int main()
 {
@@ -19,15 +22,17 @@ int main()
     int kmain = 0;
     srand(time(0));
     Console_clear();
-    printf("Good morning, master Bruce\n");
-    printf("Shall I make you some coffe?\n");
-    printf("\n");
+    putsblue("Good morning, master Bruce");
+    putsblue("Shall I make you some coffe?");
+    puts("");
 
     do
     {
-        printf("1.Characters\n");
-        printf("2.String\n");
-        printf("3.Quit\n");
+        putsblue("M E N U");
+        puts("1.Characters");
+        puts("2.String");
+        putsred("3.Quit");
+        putsblue("4\'The Hobbit\'\nChapter I: AN UNEXPECTED PARTY ");
 
         scanf("%i", &kmain);
         scanClear();
@@ -40,7 +45,7 @@ int main()
             Console_clear();
             do
             {
-                // Console_clear();
+                putsblue("M E N U");
                 printf("1.Alphanumeric\n");
                 printf("2.Alphabetic (uppercase)\n");
                 printf("3.Alphabetic (lowercase)\n");
@@ -48,7 +53,7 @@ int main()
                 printf("5.Decimal digit\n");
                 printf("6.Hexadecimal digit\n");
                 printf("7.Punctuation\n");
-                printf("\n\n8.<-- Go to Main menu\n");
+                putsred("\n\n8.<-- Go to Main menu");
 
                 scanf("%i", &kChar);
 
@@ -131,7 +136,7 @@ int main()
                 default:
                 {
                     Console_clear();
-                    printf("I dont understand you properly\n\n");
+                    putsred("I dont understand you\n");
                 }
                 }
             } while (kChar != 8);
@@ -143,199 +148,274 @@ int main()
             Console_clear();
             int N = 0;
             int kString = 0;
-            
-            puts("Would you be so kind to enter N, please:");
-            do{
+
+            putsblue("Would you be so kind to enter N, please:");
+            do
+            {
                 scanf("%i", &N);
                 scanClear();
-            } while(N <= 0);
+            } while (N <= 0);
             // N+=1;
-            
+
             char main[N];
-            
-            for(int i = 0; i < N - 1; i++){
+
+            for (int i = 0; i < N - 1; i++)
+            {
                 main[i] = rand() % (126 - 32 + 1) + 32;
             }
-            main [N+1] = '\0';
+            main[N + 1] = '\0';
 
             Console_clear();
-            do {
-                puts("Your string:");
+            do
+            {
+                Console_setCursorAttribute(FG_CYAN);
+                putsblue("Your string:");
+                Console_reset();
                 printf("\"%s\"\n\n\n", main);
 
+                putsblue("M E N U");
                 puts("1.Change string");
                 puts("2.Reset string");
                 puts("3.Exctract substring");
                 puts("4.Substrings divided by char");
                 puts("5.The longest word");
-                puts("6.");
-                puts("7.");
-                puts("<--8.Main menu");
+                puts("6.Output all decimals");
+                puts("7.Output summ of float");
+                putsred("\n\n<--8.Main menu");
                 scanf("%i", &kString);
                 scanClear();
-                switch (kString){
-                    case 1 : {
-                        Console_clear();
-                        puts("Enter your string:");
-                        fgets(main, N + 1 , stdin);
-                        int strLength = strlen(main);
-                        int hasNL = main[strLength - 1] == '\n';
-                        if (hasNL){
-                            main[strLength - 1] = '\0';
-                            // strLength -= 1;
-                        } else if (strLength >= N) {
-                            scanClear();
-                        }
-                        // scanClear();
-                        Console_clear();
-                
-                    } break;
-                     case 2: {
-                        Console_clear();
-                        main[0] = '\0';
-                        Console_clear();
-                    } break;
-                    
-                    case 3: {
-                        Console_clear();
-                        puts(main);
-                        puts("Choose index");
-                        int indexCase3 = 0;
-                        
-                        do {
-                        scanf("%i", &indexCase3);
-                        } while(indexCase3 > N || indexCase3 < 0);
+                switch (kString)
+                {
+                case 1:
+                {
+                    Console_clear();
+                    putsblue("Enter your string:");
+                    fgets(main, N + 1, stdin);
+                    int strLength = strlen(main);
+                    int hasNL = main[strLength - 1] == '\n';
+                    if (hasNL)
+                    {
+                        main[strLength - 1] = '\0';
+                    }
+                    else if (strLength >= N)
+                    {
                         scanClear();
-                        
-                        puts("Enter length");
-                        int lenghtcase3 = 0;
-                        scanf("%i", &lenghtcase3);
-                        
-                        char case3buf[N];
-                        for(int i = indexCase3 - 1, j = 0; i <= lenghtcase3; i++){
-                            case3buf[j] = main[i];
-                            j++;
-                        }
-                        
-                        Console_clear();
-                        puts("Your substring:");
-                        printf("\"%s\"\n", case3buf);
-                    } break;
-                    
-                    case 4: {
-                        Console_clear();
-                        puts(main);
-                        puts("Subdividing char:");
-                        char case4char = ' ';
-                        // scanClear();
-                        scanf("%c", &case4char);
-                        scanClear();
-                        Console_clear();
-                        printf("Strings divided by \'%c\'\n",  case4char);
-                        char case4buf[N];
-                        int tmpI = 0;
-                        for(int i = 0; ; i++){
-                            char ch = main[i];
-                            if (ch == case4char || ch =='\0'){
-                                if (tmpI != 0 ){
-                                    case4buf[tmpI] = '\0';
-                                    printf(">");
-                                    puts(case4buf);
-                                    tmpI = 0;
-                                }
-                                if (ch == '\0'){
-                                    break;
-                                } 
-                            
-                            } 
-                            else {
-                                    case4buf[tmpI] = ch;
-                                    tmpI += 1;
-                            }
-                            // puts("\n");
-                        }
-                    } break;
-                    
-                    case 5: {
-                        Console_clear();
-                        puts(main);
-                        char maxlength[N];
-                        maxlength[0] = '\0';
-                        char case4buf[N];
-                        int tmpI = 0;
-                        for(int i = 0; ; i++){
-                            char ch = main[i];
-                            if (ch == ' ' || ch =='\0'){
-                                if (tmpI != 0 ){
-                                    case4buf[tmpI] = '\0';
-                                    if (strlen(case4buf)>strlen(maxlength)){
-                                        strcpy(maxlength, case4buf);
-                                        
-                                    }
-                                    tmpI = 0;
-                                    
-                                }
-                                if (ch == '\0'){
-                                    break;
-                                } 
-                            
-                            } 
-                            else if (ch >= 65 & ch <= 122){
-                                    case4buf[tmpI] = ch;
-                                    tmpI += 1;
-                            }
-                            puts("\n");
-                        }
-                        Console_clear();
-                        puts("The longest word is:");
-                        puts(maxlength);
-                    } break;
-                    
-                    case 6: {
-                        // scanClear();
-                        Console_clear();
-                        char case6buf[N];
-                        // case6buf[0] = '\0';
-                        // char case6digit[N];
-                        // case6digit[0] = '\0';
-                        int j = 0;
-                        puts("Your decimals are:");
-                        for(int i = 0; ; i++){
-                            char ch = main[i];
-                            if(!(isdigit(ch)) || ch == '\0'){
-                                if(j!=0){
-                                    case6buf[j] = '\0';
-                                    puts(case6buf);
-                                    j = 0;
-                                }
-                                if (ch == '\0'){
-                                    break;
-                                }
-
-                            } else if (isdigit(ch)){
-                                case6buf[j] = ch;
-                                j+= 1;
-                            }
-                            
-                            
-                        }
-                        // printf("%i\n",atoi(main));
-                    } break;
-                    
-                    case 7: {
-                        printf("HelloHElloHELO\n");
-                    } break;
-                    
-                    
-                    case 8:{
-                        Console_clear();
-                    } break;
-                    
-                    default: {
-                        puts("Error, wrong value");
-                    } 
+                    }
+                    Console_clear();
                 }
-            } while(kString != 8);
+                break;
+                case 2:
+                {
+                    Console_clear();
+                    main[0] = '\0';
+                    Console_clear();
+                }
+                break;
+
+                case 3:
+                {
+                    Console_clear();
+                    puts(main);
+                    putsblue("Choose index");
+                    int indexBuf3 = 0;
+
+                    do
+                    {
+                        scanf("%i", &indexBuf3);
+                    } while (indexBuf3 > N || indexBuf3 < 0);
+                    scanClear();
+
+                    putsblue("Enter length");
+                    int lenghtcase3 = 0;
+                    scanf("%i", &lenghtcase3);
+
+                    char strBuf3[N];
+                    for (int i = indexBuf3 - 1, j = 0; i <= lenghtcase3; i++)
+                    {
+                        strBuf3[j] = main[i];
+                        j++;
+                    }
+
+                    Console_clear();
+                    putsblue("Your substring:");
+                    printf("\"%s\"\n", strBuf3);
+                }
+                break;
+
+                case 4:
+                {
+                    Console_clear();
+                    puts(main);
+                    putsblue("Subdividing char:");
+                    char cahrBuf4 = ' ';
+                    // scanClear();
+                    scanf("%c", &cahrBuf4);
+                    scanClear();
+                    Console_clear();
+                    Console_setCursorAttribute(FG_CYAN);
+                    printf("Strings divided by \'%c\'\n", cahrBuf4);
+                    Console_reset();
+                    char strBuf4[N];
+                    int tmpI = 0;
+                    for (int i = 0;; i++)
+                    {
+                        char ch = main[i];
+                        if (ch == cahrBuf4 || ch == '\0')
+                        {
+                            if (tmpI != 0)
+                            {
+                                strBuf4[tmpI] = '\0';
+                                printf(">\"%s\"\n\n", strBuf4);
+
+                                tmpI = 0;
+                            }
+                            if (ch == '\0')
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            strBuf4[tmpI] = ch;
+                            tmpI += 1;
+                        }
+                        // puts("\n");
+                    }
+                }
+                break;
+
+                case 5:
+                {
+                    Console_clear();
+                    puts(main);
+                    char maxlength[N];
+                    maxlength[0] = '\0';
+                    char strBuf5[N];
+                    int tmpI = 0;
+                    for (int i = 0;; i++)
+                    {
+                        char ch = main[i];
+                        if (ch == '\0' || (isalpha(ch) == 0))
+                        {
+                            if (tmpI != 0)
+                            {
+                                strBuf5[tmpI] = '\0';
+                                if (strlen(strBuf5) > strlen(maxlength))
+                                {
+                                    strcpy(maxlength, strBuf5);
+                                }
+                                tmpI = 0;
+                            }
+                            if (ch == '\0')
+                            {
+                                break;
+                            }
+                        }
+                        else if (isalpha(ch))
+                        {
+                            strBuf5[tmpI] = ch;
+                            tmpI += 1;
+                        }
+                        puts("\n");
+                    }
+                    Console_clear();
+                    putsblue("The longest word is:");
+                    puts(maxlength);
+                }
+                break;
+
+                case 6:
+                {
+                    Console_clear();
+                    char strBuf6[N];
+                    strBuf6[0] = '\0';
+                    int j = 0;
+                    putsblue("Your decimals are:");
+                    for (int i = 0;; i++)
+                    {
+                        char ch = main[i];
+                        if (!(isdigit(ch)) || ch == '\0')
+                        {
+                            if (j != 0)
+                            {
+                                strBuf6[j] = '\0';
+                                puts(strBuf6);
+                                j = 0;
+                            }
+                            if (ch == '\0')
+                            {
+                                break;
+                            }
+                        }
+                        else if (isdigit(ch))
+                        {
+                            strBuf6[j] = ch;
+                            j += 1;
+                        }
+                    }
+                }
+                break;
+
+                case 7:
+                {
+                    Console_clear();
+                    char strBuf7[N];
+                    strBuf7[0] = '0';
+                    bool dotSaved = false;
+                    float res = 0;
+                    putsblue("Floats are:");
+                    for (int i = 0, j = 0;; i++)
+                    {
+                        char ch = main[i];
+                        if ((!isdigit(ch) && dotSaved) || ch == '\0')
+                        {
+                            if (j != 0)
+                            {
+                                strBuf7[j] = '\0';
+                                puts(strBuf7);
+                                res += atof(strBuf7);
+                                j = 0;
+                                dotSaved = false;
+                            }
+                            if (ch == '\0')
+                            {
+                                break;
+                            }
+                        }
+                        if (!isdigit(ch) && !dotSaved && ch != '.')
+                        {
+                            strBuf7[j] = '\0';
+                            j = 0;
+                        }
+                        bool dotSavedNot = (isdigit(ch) || ch == '.') && !dotSaved;
+                        if (dotSavedNot || (isdigit(ch) && dotSaved))
+                        {
+                            strBuf7[j] = ch;
+                            j += 1;
+                            if (ch == '.')
+                            {
+                                dotSaved = true;
+                            }
+                        }
+                    }
+                    putsblue("Your res is:");
+                    printf("%.2f\n", res);
+                }
+                break;
+
+                case 8:
+                {
+                    Console_clear();
+                }
+                break;
+
+                default:
+                {
+                    Console_clear();
+                    putsred("Error, wrong value");
+                }
+                }
+            } while (kString != 8);
         }
         break;
 
@@ -345,10 +425,81 @@ int main()
         }
         break;
 
+        case 4:
+        {
+            puts("\n");
+            char bookmain[10000];
+            strcpy(bookmain, "In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms\
+and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to eat: it was a \
+hobbit-hole, and that means comfort.It had a perfectly round door like a porthole, painted green, with a shiny yellow brass knob in the \
+exact middle. The door opened on to a tube-shaped hall like a tunnel: a very comfortable tunnel \
+without smoke, with panelled walls, and floors tiled and carpeted, provided with polished chairs, and \
+lots and lots of pegs for hats and coats — the hobbit was fond of visitors. The tunnel wound on and on, \
+going fairly but not quite straight into the side of the hill — The Hill, as all the people for many miles \
+round called it — and many little round doors opened out of it, first on one side and then on another. No \
+going upstairs for the hobbit: bedrooms, bathrooms, cellars, pantries (lots of these), wardrobes (he had \
+whole rooms devoted to clothes), kitchens, dining-rooms, all were on the same floor, and indeed on \
+the same passage. The best rooms were all on the left-hand side (going in), for these were the only \
+ones to have windows, deep-set round windows looking over his garden, and meadows beyond, sloping \
+down to the river. This hobbit was a very well-to-do hobbit, and his name was Baggins. The Bagginses had lived in \
+the neighbourhood of The Hill for time out of mind, and people considered them very respectable, not \
+only because most of them were rich, but also because they never had any adventures or did anything \
+unexpected: you could tell what a Baggins would say on any question without the bother of asking \
+him. This is a story of how a Baggins had an adventure, and found himself doing and saying things \
+altogether unexpected. He may have lost the neighbours’ respect, but he gained — well,you will see \
+whether he gained anything in the end.The mother of our particular hobbit — what is a hobbit? I suppose hobbits need some description \
+nowadays, since they have become rare and shy of the Big People, as they call us. They are (or were) a \
+little people, about half our height, and smaller than the bearded Dwarves. Hobbits have no beards. \
+There is little or no magic about them, except the ordinary everyday sort which helps them to \
+disappear quietly and quickly when large stupid folk like you and me come blundering along, making \
+a noise like elephants which they can hear a mile off. They are inclined to be fat in the stomach; they \
+dress in bright colours (chiefly green and yellow); wear no shoes, because their feet grow natural \
+leathery soles and thick warm brown hair like the stuff on their heads (which is curly); have long \
+clever brown fingers, good-natured faces, and laugh deep fruity laughs (especially after dinner, which \
+they have twice a day when they can get it). Now you know enough to go on with. As I was saying, the \
+mother of this hobbit — of Bilbo Baggins, that is — was the famous Belladonna Took, one of the three \
+remarkable daughters of the Old Took, head of the hobbits who lived across The Water, the small river \
+that ran at the foot of The Hill. It was often said (in other families) that long ago one of the Took \
+ancestors must have taken a fairy wife. That was, of course, absurd, but certainly there was still \
+something not entirely hobbitlike about them, and once in a while members of the Took-clan would go \
+and have adventures. They discreetly disappeared, and the family hushed it up; but the fact remained");
+
+            Console_clear();
+            int page = 0;
+            putsred("Lets start reading, choose a page");
+            char buf[1005];
+            while(1)
+            {
+                scanf("%i", &page);
+                if (page == 0){
+                    break;
+                }
+                Console_clear();
+
+                for (int j = 0; j < 1000; j++)
+                {
+                    buf[j] = bookmain[(page - 1) * 1000 + j];
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    buf[1000 + i + 1] = '.';
+                }
+                buf[1004] = '\0';
+                Console_setCursorAttribute(FG_GREEN);
+                printf("Hobbit, chapter 1, page %i\n\n", page);
+                Console_reset();
+                puts(buf);
+
+                putsblue("\n\nChoose your page(4 pages, 0 to exit)");
+            };
+            Console_clear();
+        }
+        break;
+
         default:
         {
             Console_clear();
-            printf("Sorry, master, I dont understand you\n\n");
+            putsred("Sorry, master, I dont understand you\n");
         }
         }
 
@@ -369,6 +520,21 @@ void printAllChar(int ASCIMIN, int ASCIMAX)
     }
     printf("\n");
 }
-void scanClear () {
-    for (char _ch; (_ch = getchar()) != '\n';){}
+void scanClear()
+{
+    for (char _ch; (_ch = getchar()) != '\n';)
+    {
+    }
+}
+void putsblue(char str[50])
+{
+    Console_setCursorAttribute(FG_CYAN);
+    puts(str);
+    Console_reset();
+}
+void putsred(char str[50])
+{
+    Console_setCursorAttribute(FG_INTENSITY_RED);
+    puts(str);
+    Console_reset();
 }
