@@ -8,7 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-
+int error = 0;
 enum TokenKeywords
 {
     KW_LONG = 0, // 'int'
@@ -81,9 +81,10 @@ struct StringTable
     size_t count;
     size_t rowCapacity;
 };
+
 bool isFloatOrInt(char *p);
 void findIds();
-void parseCode(char *p);
+int parseCode(char *p);
 struct StringTable createStringTable(char *items, int cap, int rowCap);
 char *readWord(char *str, char *dest, int destsize);
 char *readDigit(char *src, char *dest, int destSize);
@@ -91,15 +92,8 @@ char *readChar(char *src, char *dest, int destSize);
 
 bool isDelimiter(char src);
 bool isOperator(char src);
-void printTokenList(struct Token list)
-{
-    for (int i = 0; i < list.count; i++)
-    {
-        printf(" ");
-        printf(" ");
-        printf(" ");
-    }
-}
+
+void outputTokens(struct TokenList *list1);
 int main()
 {
     system("clear");
@@ -118,8 +112,11 @@ do {\
 
     int tokenAmount = 200;
 
-    parseCode(string);
-
+    
+    if(parseCode(string)){
+        puts("ERROR");
+        return 1;
+    }
     // Кінець програми
     return 0;
 }
@@ -137,7 +134,7 @@ createStringTable(char *items, int cap, int rowCap)
 }
 char *readString(char *src, char *dest, int destSize);
 
-void parseCode(char *p)
+int parseCode(char *p)
 {
 
     int lexArrCap = 50;
@@ -176,6 +173,7 @@ void parseCode(char *p)
 
     while (*ch != '\0')
     {
+
         if (isspace(*ch))
         {
             //ignore
@@ -183,22 +181,21 @@ void parseCode(char *p)
         }
         else if (isdigit(*ch))
         {
+            bool check = isFloatOrInt(ch);
             ch = readDigit(ch, lexemsList.items + lexemsList.count * lexArrRowCap, lexArrRowCap);
 
             tokens[tokensList.count].type = TOKEN_LITERAL;
-            if (isFloatOrInt(ch))
+            if (check)
             {
-                tokens[tokensList.count].subType = LIT_INTEGER;
+                tokens[tokensList.count].subType = LIT_FLOAT;
             }
             else
             {
-                tokens[tokensList.count].subType = LIT_FLOAT;
+                tokens[tokensList.count].subType = LIT_INTEGER;
             }
 
             tokens[tokensList.count].lexeme = lexemsList.items + lexemsList.count * lexArrRowCap;
             // lexemsList.count += 1;
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
 
             tokensList.count += 1;
             lexemsList.count += 1;
@@ -216,41 +213,35 @@ void parseCode(char *p)
                 ch = readWord(ch, lexemsList.items + lexemsList.count * lexArrRowCap, lexArrRowCap);
             }
 
-
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
-            for (int i = 1; i < 7; i++)
+            for (int i = 0; i < 6; i++)
             {
-                if (strcmp(keyword[i - 1], tokens[tokensList.count].lexeme) == 0)
+                if (strcmp(keyword[i], tokens[tokensList.count].lexeme) == 0)
                 {
                     tokens[tokensList.count].type = TOKEN_KEYWORD;
                     tokens[tokensList.count].subType = i;
                 }
             }
+            // IS IDENTIFIER
 
-
-
-            for(int i = 0; i < idList.count ;i++ ){
-                if(strcmp(tokens[tokensList.count].lexeme, idListTmp)==0){
+            for (int i = 0; i < idList.count; i++)
+            {
+                if (strcmp(tokens[tokensList.count].lexeme, idListTmp) == 0)
+                {
                     idListTmp += lexArrRowCap;
-                    tokens[tokensList.count].type =TOKEN_IDENTIFIER;
+                    tokens[tokensList.count].type = TOKEN_IDENTIFIER;
                 }
             }
-            
-            
-            
-            if (tokens[tokensList.count].type != TOKEN_IDENTIFIER &&tokens[tokensList.count].type != TOKEN_KEYWORD && tokens[tokensList.count].type != TOKEN_LITERAL)
+
+            if (tokens[tokensList.count].type != TOKEN_IDENTIFIER && tokens[tokensList.count].type != TOKEN_KEYWORD && tokens[tokensList.count].subType != 3)
             {
 
                 strcpy(idListTmp, tokens[tokensList.count].lexeme);
                 idListTmp += idList.rowCapacity * idList.count;
                 idList.count += 1;
-                tokens[tokensList.count].type =TOKEN_IDENTIFIER;
+                tokens[tokensList.count].type = TOKEN_IDENTIFIER;
                 idListTmp += lexArrRowCap;
-
             }
-
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
 
             tokensList.count += 1;
             lexemsList.count += 1;
@@ -261,16 +252,13 @@ void parseCode(char *p)
             tokens[tokensList.count].type = TOKEN_DELIMITER;
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
 
-            for (int i = 1; i < 7; i++)
+            for (int i = 0; i < 6; i++)
             {
-                if (strcmp(delimiters[i - 1], tokens[tokensList.count].lexeme) == 0)
+                if (strcmp(delimiters[i], tokens[tokensList.count].lexeme) == 0)
                 {
                     tokens[tokensList.count].subType = i;
                 }
             }
-
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
 
             tokensList.count += 1;
             lexemsList.count += 1;
@@ -281,16 +269,14 @@ void parseCode(char *p)
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
             tokens[tokensList.count].type = TOKEN_OPERATOR;
 
-            for (int i = 1; i < 7; i++)
+            for (int i = 0; i < 6; i++)
             {
-                if (strcmp(operators[i - 1], tokens[tokensList.count].lexeme) == 0)
+                if (strcmp(operators[i], tokens[tokensList.count].lexeme) == 0)
                 {
                     tokens[tokensList.count].subType = i;
                 }
             }
 
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
             lexemsList.count += 1;
             tokensList.count += 1;
         }
@@ -298,9 +284,15 @@ void parseCode(char *p)
         {
             ch += 1;
         }
+        if (ch == NULL)
+        {
+            return 1;
+        }
     }
     // struct Token *tempPointer = &tokens[tokenCount].lexeme;
+    outputTokens(&tokensList);
     findIds();
+    return 0;
 }
 char *readString(char *src, char *dest, int destSize)
 {
@@ -369,15 +361,18 @@ char *readDigit(char *src, char *dest, int destSize)
             }
             else
             {
+                return NULL;
                 //ERROR
             }
         }
         else
+        {
 
             *dest = *p;
-        dest++;
-        p++;
-        counter++;
+            dest++;
+            p++;
+            counter++;
+        }
     }
     *dest = '\0';
 
@@ -404,7 +399,7 @@ bool isOperator(char src)
 bool isFloatOrInt(char *p)
 {
     bool result = false;
-    while (*p != '\0')
+    while (!isspace(*p)|| p ==NULL)
     {
         if (*p == '.')
         {
@@ -417,6 +412,204 @@ bool isFloatOrInt(char *p)
 }
 void findIds()
 {
+}
+void outputTokens(struct TokenList *list1)
+{
+    struct Token *list = list1->token;
+    puts("TOKENS>>>:");
+    int i = 0;
+    while (i < list1->count)
+    {
+        switch (list->type)
+        {
+
+        case TOKEN_KEYWORD:
+        {
+            switch (list->subType)
+            {
+            case KW_BREAK:
+            {
+                printf("TOKEN KEYWORD      ");
+                printf("type = BREAK      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case KW_FLOAT:
+            {
+                printf("TOKEN KEYWORD      ");
+                printf("type = FLOAT      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case KW_DO:
+            {
+                printf("TOKEN KEYWORD      ");
+                printf("type = DO      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case KW_LONG:
+            {
+                printf("TOKEN KEYWORD      ");
+                printf("type = LONG      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case KW_WHILE:
+            {
+                printf("TOKEN KEYWORD      ");
+                printf("type = WHILE      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+
+            default:
+                break;
+            }
+        }
+        break;
+        case TOKEN_DELIMITER:
+        {
+            printf("TOKEN DELIMITER:     ");
+            switch (list->subType)
+            {
+            case DEL_COMMA:
+            {
+                printf("type = comma      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case DEL_LEFTFIGPAR:
+            {
+                printf("type = leftfigpar      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case DEL_LEFTPAR:
+            {
+                printf("type = leftPar      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case DEL_RIGHTFIGPAR:
+            {
+                printf("type = rightfigpar     ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case DEL_RIGHTPAR:
+            {
+                printf("type = rightpar     ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case DEL_SEMICOLON:
+            {
+                printf("type = semicolon     ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+        break;
+
+        case TOKEN_IDENTIFIER:
+        {
+            printf("TOKEN_IDENTIFIER ");
+            printf("             \"%s\"\n", list->lexeme);
+        }
+        break;
+
+        case TOKEN_LITERAL:
+        {
+            switch (list->subType)
+            {
+            case LIT_FLOAT:
+            {
+                printf("TOKEN LITERAL      ");
+                printf("type = float      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case LIT_INTEGER:
+            {
+                printf("TOKEN LITERAL      ");
+                printf("type = int      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case LIT_STRING:
+            {
+                printf("TOKEN LITERAL      ");
+                printf("type = string      ");
+                printf("%s \n", list->lexeme);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+        break;
+
+        case TOKEN_OPERATOR:
+        {
+            switch (list->subType)
+            {
+            case OP_DIVISION:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = division      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case OP_EQUALITY:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = equality      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case OP_ISBIGGER:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = isbigger      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case OP_MINUS:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = minus      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case OP_MULT:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = mult      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            case OP_PLUS:
+            {
+                printf("TOKEN OPERATOR      ");
+                printf("type = plus      ");
+                printf("\"%s\" \n", list->lexeme);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+        break;
+        default:
+            break;
+        }
+        list++;
+        i++;
+    }
 }
 // {
 //     int p;
