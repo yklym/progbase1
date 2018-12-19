@@ -8,11 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-<<<<<<< HEAD
 int error = 0;
-=======
-
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 enum TokenKeywords
 {
     KW_LONG = 0, // 'int'
@@ -85,16 +81,10 @@ struct StringTable
     size_t count;
     size_t rowCapacity;
 };
-<<<<<<< HEAD
 
 bool isFloatOrInt(char *p);
 void findIds();
 int parseCode(char *p);
-=======
-bool isFloatOrInt(char *p);
-void findIds();
-void parseCode(char *p);
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 struct StringTable createStringTable(char *items, int cap, int rowCap);
 char *readWord(char *str, char *dest, int destsize);
 char *readDigit(char *src, char *dest, int destSize);
@@ -102,20 +92,8 @@ char *readChar(char *src, char *dest, int destSize);
 
 bool isDelimiter(char src);
 bool isOperator(char src);
-<<<<<<< HEAD
 
 void outputTokens(struct TokenList *list1);
-=======
-void printTokenList(struct Token list)
-{
-    for (int i = 0; i < list.count; i++)
-    {
-        printf(" ");
-        printf(" ");
-        printf(" ");
-    }
-}
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 int main()
 {
     system("clear");
@@ -134,16 +112,11 @@ do {\
 
     int tokenAmount = 200;
 
-<<<<<<< HEAD
     
     if(parseCode(string)){
         puts("ERROR");
         return 1;
     }
-=======
-    parseCode(string);
-
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
     // Кінець програми
     return 0;
 }
@@ -161,11 +134,7 @@ createStringTable(char *items, int cap, int rowCap)
 }
 char *readString(char *src, char *dest, int destSize);
 
-<<<<<<< HEAD
 int parseCode(char *p)
-=======
-void parseCode(char *p)
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 {
 
     int lexArrCap = 50;
@@ -204,10 +173,7 @@ void parseCode(char *p)
 
     while (*ch != '\0')
     {
-<<<<<<< HEAD
 
-=======
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
         if (isspace(*ch))
         {
             //ignore
@@ -215,7 +181,6 @@ void parseCode(char *p)
         }
         else if (isdigit(*ch))
         {
-<<<<<<< HEAD
             bool check = isFloatOrInt(ch);
             ch = readDigit(ch, lexemsList.items + lexemsList.count * lexArrRowCap, lexArrRowCap);
 
@@ -227,27 +192,10 @@ void parseCode(char *p)
             else
             {
                 tokens[tokensList.count].subType = LIT_INTEGER;
-=======
-            ch = readDigit(ch, lexemsList.items + lexemsList.count * lexArrRowCap, lexArrRowCap);
-
-            tokens[tokensList.count].type = TOKEN_LITERAL;
-            if (isFloatOrInt(ch))
-            {
-                tokens[tokensList.count].subType = LIT_INTEGER;
-            }
-            else
-            {
-                tokens[tokensList.count].subType = LIT_FLOAT;
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
             }
 
             tokens[tokensList.count].lexeme = lexemsList.items + lexemsList.count * lexArrRowCap;
             // lexemsList.count += 1;
-<<<<<<< HEAD
-=======
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 
             tokensList.count += 1;
             lexemsList.count += 1;
@@ -265,24 +213,15 @@ void parseCode(char *p)
                 ch = readWord(ch, lexemsList.items + lexemsList.count * lexArrRowCap, lexArrRowCap);
             }
 
-<<<<<<< HEAD
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
             for (int i = 0; i < 6; i++)
             {
                 if (strcmp(keyword[i], tokens[tokensList.count].lexeme) == 0)
-=======
-
-            tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
-            for (int i = 1; i < 7; i++)
-            {
-                if (strcmp(keyword[i - 1], tokens[tokensList.count].lexeme) == 0)
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
                 {
                     tokens[tokensList.count].type = TOKEN_KEYWORD;
                     tokens[tokensList.count].subType = i;
                 }
             }
-<<<<<<< HEAD
             // IS IDENTIFIER
 
             for (int i = 0; i < idList.count; i++)
@@ -295,41 +234,15 @@ void parseCode(char *p)
             }
 
             if (tokens[tokensList.count].type != TOKEN_IDENTIFIER && tokens[tokensList.count].type != TOKEN_KEYWORD && tokens[tokensList.count].subType != 3)
-=======
-
-
-
-            for(int i = 0; i < idList.count ;i++ ){
-                if(strcmp(tokens[tokensList.count].lexeme, idListTmp)==0){
-                    idListTmp += lexArrRowCap;
-                    tokens[tokensList.count].type =TOKEN_IDENTIFIER;
-                }
-            }
-            
-            
-            
-            if (tokens[tokensList.count].type != TOKEN_IDENTIFIER &&tokens[tokensList.count].type != TOKEN_KEYWORD && tokens[tokensList.count].type != TOKEN_LITERAL)
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
             {
 
                 strcpy(idListTmp, tokens[tokensList.count].lexeme);
                 idListTmp += idList.rowCapacity * idList.count;
                 idList.count += 1;
-<<<<<<< HEAD
                 tokens[tokensList.count].type = TOKEN_IDENTIFIER;
                 idListTmp += lexArrRowCap;
             }
 
-=======
-                tokens[tokensList.count].type =TOKEN_IDENTIFIER;
-                idListTmp += lexArrRowCap;
-
-            }
-
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
-
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
             tokensList.count += 1;
             lexemsList.count += 1;
         }
@@ -339,26 +252,14 @@ void parseCode(char *p)
             tokens[tokensList.count].type = TOKEN_DELIMITER;
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
 
-<<<<<<< HEAD
             for (int i = 0; i < 6; i++)
             {
                 if (strcmp(delimiters[i], tokens[tokensList.count].lexeme) == 0)
-=======
-            for (int i = 1; i < 7; i++)
-            {
-                if (strcmp(delimiters[i - 1], tokens[tokensList.count].lexeme) == 0)
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
                 {
                     tokens[tokensList.count].subType = i;
                 }
             }
 
-<<<<<<< HEAD
-=======
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
-
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
             tokensList.count += 1;
             lexemsList.count += 1;
         }
@@ -368,25 +269,14 @@ void parseCode(char *p)
             tokens[tokensList.count].lexeme = (lexemsList.items + lexemsList.count * lexArrRowCap);
             tokens[tokensList.count].type = TOKEN_OPERATOR;
 
-<<<<<<< HEAD
             for (int i = 0; i < 6; i++)
             {
                 if (strcmp(operators[i], tokens[tokensList.count].lexeme) == 0)
-=======
-            for (int i = 1; i < 7; i++)
-            {
-                if (strcmp(operators[i - 1], tokens[tokensList.count].lexeme) == 0)
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
                 {
                     tokens[tokensList.count].subType = i;
                 }
             }
 
-<<<<<<< HEAD
-=======
-            puts(tokens[tokensList.count].lexeme);
-            printf("||%i||%i||\n", tokens[tokensList.count].type, tokens[tokensList.count].subType);
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
             lexemsList.count += 1;
             tokensList.count += 1;
         }
@@ -394,7 +284,6 @@ void parseCode(char *p)
         {
             ch += 1;
         }
-<<<<<<< HEAD
         if (ch == NULL)
         {
             return 1;
@@ -404,11 +293,6 @@ void parseCode(char *p)
     outputTokens(&tokensList);
     findIds();
     return 0;
-=======
-    }
-    // struct Token *tempPointer = &tokens[tokenCount].lexeme;
-    findIds();
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 }
 char *readString(char *src, char *dest, int destSize)
 {
@@ -477,15 +361,11 @@ char *readDigit(char *src, char *dest, int destSize)
             }
             else
             {
-<<<<<<< HEAD
                 return NULL;
-=======
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
                 //ERROR
             }
         }
         else
-<<<<<<< HEAD
         {
 
             *dest = *p;
@@ -493,13 +373,6 @@ char *readDigit(char *src, char *dest, int destSize)
             p++;
             counter++;
         }
-=======
-
-            *dest = *p;
-        dest++;
-        p++;
-        counter++;
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
     }
     *dest = '\0';
 
@@ -526,11 +399,7 @@ bool isOperator(char src)
 bool isFloatOrInt(char *p)
 {
     bool result = false;
-<<<<<<< HEAD
     while (!isspace(*p)|| p ==NULL)
-=======
-    while (*p != '\0')
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
     {
         if (*p == '.')
         {
@@ -544,7 +413,6 @@ bool isFloatOrInt(char *p)
 void findIds()
 {
 }
-<<<<<<< HEAD
 void outputTokens(struct TokenList *list1)
 {
     struct Token *list = list1->token;
@@ -743,8 +611,6 @@ void outputTokens(struct TokenList *list1)
         i++;
     }
 }
-=======
->>>>>>> 2b0f4b450e23eaa797cb64c398cfdc87cf509078
 // {
 //     int p;
 //     for (int i = 0; p + 1 == NULL; i++)
