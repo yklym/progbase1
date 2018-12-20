@@ -112,8 +112,8 @@ do {\
 
     int tokenAmount = 200;
 
-    
-    if(parseCode(string)){
+    if (parseCode(string))
+    {
         puts("ERROR");
         return 1;
     }
@@ -300,13 +300,27 @@ char *readString(char *src, char *dest, int destSize)
     bool isStringEnd = false;
     while (!isStringEnd)
     {
+        
         if (*p == '"' && p != src)
         {
             isStringEnd = true;
         }
-        *dest = *p;
-        dest++;
-        p++;
+        if (*p == '\n')
+        {
+            *dest = '\\';
+            dest++;
+            
+            *dest = 'n';
+            dest++;
+            p++;
+
+        }
+        else
+        {
+            *dest = *p;
+            dest++;
+            p++;
+        }
     }
 
     *dest = '\0';
@@ -399,7 +413,7 @@ bool isOperator(char src)
 bool isFloatOrInt(char *p)
 {
     bool result = false;
-    while (!isspace(*p)|| p ==NULL)
+    while (!isspace(*p) || p == NULL)
     {
         if (*p == '.')
         {
