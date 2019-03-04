@@ -51,10 +51,10 @@ int main()
     
     const int w = cs.columns;
     const int h = cs.rows * 2;
-    const int delay = 100;
-    const int gravitation = 2;
-    const int pointAverage = rand() % (5 - 1 + 1) + 1;
-    const int ballAverage = 5;
+    const int delay = 33;
+    const int gravitation = 4;
+    const int pointAverage = rand() % (7 - 3 + 1) + 3;
+    const int ballAverage = 10000;
 
     struct point points[pointAverage];
     for (int i = 0; i < pointAverage; i++)

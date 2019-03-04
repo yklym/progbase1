@@ -1,0 +1,6 @@
+long i = 0;
+do {
+  float f = -45 * i / 34.4;
+  printf("Set: %d\n", f, i);
+  break;
+} while (i > 1);

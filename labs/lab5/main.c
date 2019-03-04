@@ -163,7 +163,7 @@ int main()
             {
                 main[i] = rand() % (126 - 32 + 1) + 32;
             }
-            main[N + 1] = '\0';
+            main[N - 1] = '\0';
 
             Console_clear();
             do
